@@ -1,0 +1,81 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only n
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{graphicx}
+\graphicspath{ {./figures/} }
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+%In case you encounter the following error:
+%Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
+%Error 1000 An error occurred while parsing a contents stream. Unable to analyze the PDF file.
+%This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
+%Please use one of the alternatives below to circumvent this error by uncommenting one or the other
+%\pdfobjcompresslevel=0
+%\pdfminorversion=4
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% The following packages can be found on http:\\www.ctan.org
+%\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+%\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+
+\title{\LARGE \bf Spatial exploration behavior in large scale VR predicts subjective spatial presence}
+
+\author{Lukas Gehrke$^{1}$, Klaus Gramann$^{1,3,4}$% <-this % stops a space
+\thanks{This research was supported by a grant from the German Federal Ministry of Education and Research (01GQ1511) to KG}% <-this % stops a space
+\thanks{$^{1}$Lukas Gehrke and Klaus Gramann are with Department of Biopsychology and Neuroergonomics, TU Berlin, Strasse des 17. Juni 135, 10623 Berlin, Germany
+        {\tt\small lukas.gehrke@tu-berlin.de}}%
+\thanks{$^{3}$Center for Advanced Neurological Engineering, University of California San Diego, USA}
+\thanks{$^{4}$School of Software, University of Technology Sydney, USA}
+}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+\input{chapters/0_abstract.tex}
+\end{abstract}
+
+\section{Introduction}
+\input{chapters/1_introduction.tex}
+
+\section{Methods}
+\input{chapters/2_methods.tex}
+
+\section{Results}
+\input{chapters/3_results.tex}
+
+\section{Discussion}
+\input{chapters/4_discussion.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{thebibliography}{99}
+
+\end{thebibliography}
+\end{document}
