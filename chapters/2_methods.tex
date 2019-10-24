@@ -11,6 +11,9 @@ experiment. All participants gave written informed consent to participation and 
 \centering
 \includegraphics[width=\linewidth]{IMT_Task.png}
 \vspace{0pt}
-\caption{Invisible Maze Task, \textbf{A} Participant from a bird’s eye view. \textbf{B} Participants are instructed to explore four different mazes and return to the start. \textbf{C} First-person view in binocular ''VR optics'' of a wall touch. \textbf{D} Top: Participants draw a top-down view of the explored maze. Participant is equipped with 160 channels wireless EEG, head-mounted virtual reality goggles and LEDs for motion capture. Bottom: drawn sketch map. Find a detailed description in~\cite{gehrke2018}.}
+\caption{Invisible Maze Task, \textbf{A} Participant from a bird’s eye view. \textbf{B} Participants are instructed to explore four different mazes and return to the start. \textbf{C} First-person view in binocular ""VR optics"" of a wall touch. \textbf{D} Top: Participants draw a top-down view of the explored maze. Participant is equipped with 160 channels wireless EEG, head-mounted virtual reality goggles and LEDs for motion capture. Bottom: drawn sketch map. Find a detailed description in~\cite{gehrke2018}.}
 \label{imt_task}
 \end{figure}
+
+\subsection{Statistical Analyses}
+We computed an ordinary logistic regression entering each participants IPQ general presence score as the ordinary scaled dependent variable. For the predictors, we first computed the participant average and then entered, Duration, Number of Touches, Sketchmap,  \todo{add all predictors used} into the regression model. For an explanation of each variable, pleas consult~\cite{gehrke2018}. To assess the predictive accuracy of the model, we ran leave-one-out-cross-validation (LOOCV) \todo{add LOOCV citation}. All statistical analyses were conducted using R, \todo{add version and packages citations}. The code and data are available online \todo{add link to data repository and analyses code}
