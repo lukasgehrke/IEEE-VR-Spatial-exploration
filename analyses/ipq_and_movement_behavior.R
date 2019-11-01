@@ -5,6 +5,8 @@ library(sjmisc)
 library(lmerTest)
 library(car)
 library(MASS)
+library(caret)
+library(plot3D)
 
 # load data
 load("/Users/lukasgehrke/Documents/bpn_work/publications/data/behavior_IMT1.Rdata")
@@ -12,23 +14,100 @@ head(df)
 
 # explore spatial presence
 df_agg_participant <- aggregate(. ~ Participant, data = df, mean)
-hist(df_agg_participant$IPQ_Spatial_Presence)
+# add again as due to data cleaning average got messed up
 df_agg_participant$vgame <- c(4,3,3,3,4,4,3,3,3,4,4,2,2,3,3,3,2,1,3,4,2,4,4,3,2,4,1,3,4)
 
-# step wise regression
-full.model <- lm(IPQ_Presence ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
+# step wise OLS regression
+# IPQ PRESENCE
+full.model <- lm(IPQ_Presence ~ Velocity + Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
+#summary(full.model)
 step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
 summary(step.model)
+# Cross validating the model
+set.seed(123) 
+train.control <- trainControl(method = "cv", number = 5)
+# Train the model
+model <- train(IPQ_Presence ~ vgame + Gender + PTSOT, data = df_agg_participant, method = "lm",
+               trControl = train.control)
+# Summarize the results
+print(model)
+# normalized effect on distribution of answer space (min/max)
+#model$results$RMSE / (max(df_agg_participant$IPQ_Presence)-min(df_agg_participant$IPQ_Presence))
 
-full.model <- lm(IPQ_Spatial_Presence ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
-step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
-summary(step.model)
+# cor.test(df_agg_participant$PTSOT, df_agg_participant$IPQ_Presence)
+# cor.test(df_agg_participant$vgame, df_agg_participant$IPQ_Presence)
+# cor.test(df_agg_participant$Gender, df_agg_participant$IPQ_Presence)
 
-# full.model <- lm(`IPQ Involvement` ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
+## interpret the estimates:
+# vgame up -> presence down
+# gender male -> increase presence by 2.5 points
+# worse perspective taking ability -> lower reported presence
+
+## so in the IMT task, knowing how much experience you have with videogames, what Sex you identify with as well as your score on the psychometric perspective taking task allowed us to predict your subjectively
+# reported presence with 3/4 of a point accuracy.
+# we used stepwise regression in order to minimize the potential of overfitting so other researchers may experience a stronger benefit from our findings.
+
+# what plots best present results? histogram presence, scatter vgame/presence, scatter ptsot/presence, box gender/presence
+
+hist_presence <- hist(df_agg_participant$IPQ_Presence)
+
+
+scatter3D_fancy(df_agg_participant$vgame, df_agg_participant$PTSOT, df_agg_participant$Gender, pch = 16,
+                ticktype = "detailed", theta = 15, d = 2,
+                main = "Iris data",  clab = c("Petal", "Width (cm)") )
+
+
+xlab_title <- 'video game experience'
+ylab_title <- 'spatial presence'
+s <- ggplot(df_agg_participant, aes(x=PTSOT, y=IPQ_Presence)) + #`IPQ Involvement`
+  geom_point(size=3)+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE)+
+  labs(title = "", x = xlab_title, y = ylab_title)+
+  scale_color_brewer(palette="Paired")+
+  theme_classic()
+s
+# ylim(c(1,7))
+# ylim(c(min(df_agg_participant$IPQ_Spatial_Presence)-2,max(df_agg_participant$IPQ_Spatial_Presence)))
+
+# Add small dots on basal plane and on the depth plane
+scatter3D_fancy <- function(x, y, z,..., colvar = z)
+{
+  panelfirst <- function(pmat) {
+    XY <- trans3D(x, y, z = rep(min(z), length(z)), pmat = pmat)
+    scatter2D(XY$x, XY$y, colvar = colvar, pch = ".", 
+              cex = 2, add = TRUE, colkey = FALSE)
+    
+    XY <- trans3D(x = rep(min(x), length(x)), y, z, pmat = pmat)
+    scatter2D(XY$x, XY$y, colvar = colvar, pch = ".", 
+              cex = 2, add = TRUE, colkey = FALSE)
+  }
+  scatter3D(x, y, z, ..., colvar = colvar, panel.first=panelfirst,
+            colkey = list(length = 0.5, width = 0.5, cex.clab = 0.75)) 
+}
+
+
+
+##### OTHER IPQ ITEMS #####
+
+# full.model <- lm(IPQ_Spatial_Presence ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
+# step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
+# summary(step.model)
+# # Define training control
+# set.seed(123) 
+# train.control <- trainControl(method = "cv", number = 5)
+# # Train the model
+# model <- train(IPQ_Presence ~ Duration + Mean_Ratings, data = df_agg_participant, method = "lm",
+#                trControl = train.control)
+# # Summarize the results
+# print(model)
+# # normalized effect on distribution of answer space (min/max)
+# model$results$RMSE / (max(df_agg_participant$IPQ_Spatial_Presence)-min(df_agg_participant$IPQ_Spatial_Presence))
+
+# full.model <- lm(IPQ_experienced_realism ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
 # step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
 # summary(step.model)
 # 
-# full.model <- lm(IPQ_experienced_realism ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
+# full.model <- lm(`IPQ Involvement` ~ Duration + Hand_Touches + Mean_Ratings + vgame + Gender + PTSOT + SOD, data = df_agg_participant)
 # step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
 # summary(step.model)
 
@@ -77,12 +156,18 @@ all_plot
 
 
 
+
+
+
+
+
+
+
+############### RESOURCES ###############
 df_agg_participant$IPQ_Presence <- as.factor(df_agg_participant$IPQ_Presence)
 ggplot(df_agg_participant, aes(x=IPQ_Presence, y=Mean_Ratings))+
   geom_boxplot(alpha=.2, outlier.shape = NA) +
   theme_classic()
-
-
 
 ggplot(df_agg_participant, aes(x=Mean_Ratings, y=`IPQ Involvement`, color=Run, shape=Run)) + 
   geom_point(size=3)+
@@ -90,19 +175,6 @@ ggplot(df_agg_participant, aes(x=Mean_Ratings, y=`IPQ Involvement`, color=Run, s
   labs(title = "", x = xlab_title, y = ylab_title)+
   scale_color_brewer(palette="Paired")+
   theme_minimal()
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # dichotomized
 # group participants into high and low IPQ spatial presence
