@@ -4,3 +4,5 @@
 *.synctex.gz
 *.fdb_latexmk
 *.aux
+template.out
+*.mat
