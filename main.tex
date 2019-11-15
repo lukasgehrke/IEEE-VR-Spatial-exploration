@@ -82,7 +82,7 @@
 
 %% Paper title.
 
-\title{Predicting Experienced Presence through Movement Behavior in Large Virtual Mazes}
+\title{Predicting Presence with Participant Descriptives and Ongoing Movement Behavior}
 
 
 %% This is how authors are specified in the conference style
@@ -100,12 +100,13 @@
 %% Author and Affiliation (multiple authors with multiple affiliations)
 \author{Lukas Gehrke$^{1}$\thanks{e-mail: info@lukasgehrke.com}\\ %
     \scriptsize $^{1}$Department of Biopsychology and Neuroergonomics,\\ \scriptsize Institute of Psychology and Ergonomics, TU Berlin,\\ \scriptsize Strasse des 17. Juni 135, 10623 Berlin, Germany %
+\and Sezen Akman$^{1}$\\
+    \scriptsize $^{1}$Department of Biopsychology and Neuroergonomics,\\ \scriptsize Institute of Psychology and Ergonomics, TU Berlin
 \and Klaus Gramann$^{1,2,3}$\\ %
     \scriptsize $^{1}$Department of Biopsychology and Neuroergonomics \\ \scriptsize Institute of Psychology and Ergonomics, TU Berlin \\
     \scriptsize $^{2}$Center for Advanced Neurological Engineering, \\ \scriptsize University of California San Diego, USA \\ 
     \scriptsize $^{3}$School of Software, University of Technology Sydney, Australia
 }
-
 
 %% A teaser figure can be included as follows, but is not recommended since
 %% the space is now taken up by a full width abstract.
@@ -115,18 +116,8 @@
 %}
 
 %% Abstract section.
-\abstract{Duis autem vel eum iriure dolor in hendrerit in vulputate
-velit esse molestie consequat, vel illum dolore eu feugiat nulla
-facilisis at vero eros et accumsan et iusto odio dignissim qui blandit
-praesent luptatum zzril delenit augue duis dolore te feugait nulla
-facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem
-vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et
-accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
-delenit augue duis dolore te feugait nulla facilisi.%
+\abstract{
+\input{chapters/0_abstract.tex}
 } % end of abstract
 
 %% ACM Computing Classification System (CCS). 
@@ -168,17 +159,19 @@ delenit augue duis dolore te feugait nulla facilisi.%
 %% \section{Introduction} %for journal use above \firstsection{..} instead
 
 \section{Introduction}
-\input{chapters/1_introduction/general.tex}
+\input{chapters/1_introduction/intro_teaser.tex}
+\input{chapters/1_introduction/ecological_validity.tex}
+\input{chapters/1_introduction/objective_pres.tex}
 \input{chapters/1_introduction/summary.tex}
 
 \section{Methods}
 \input{chapters/2_methods/general.tex}
 \input{chapters/2_methods/task.tex}
+\input{chapters/2_methods/assessing_presence.tex}
 \input{chapters/2_methods/broad.tex}
 \input{chapters/2_methods/detailed.tex}
 
 \section{Results}
-\input{chapters/3_results/general.tex}
 \input{chapters/3_results/broad.tex}
 \input{chapters/3_results/detailed.tex}
 
@@ -188,10 +181,11 @@ delenit augue duis dolore te feugait nulla facilisi.%
 
 %% if specified like this the section will be committed in review mode
 \acknowledgments{
-This research was supported by a grant from the German Federal Ministry of Education and Research (01GQ1511) to KG.}
+This research was supported by a grant from the German Federal Ministry of Education and Research (01GQ1511) to KG.
+}
 
-%\bibliographystyle{abbrv}
-\bibliographystyle{abbrv-doi}
+\bibliographystyle{abbrv}
+%\bibliographystyle{abbrv-doi}
 %\bibliographystyle{abbrv-doi-narrow}
 %\bibliographystyle{abbrv-doi-hyperref}
 %\bibliographystyle{abbrv-doi-hyperref-narrow}
