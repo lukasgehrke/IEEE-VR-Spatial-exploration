@@ -15,6 +15,8 @@ settings.streamname = 'Rigid';
 mazes = ['I', 'L', 'Z', 'U'];
 settings.runs = 1:3;
 
+%% run analyses
+
 for m = mazes
     
     if strcmp(m, 'L')
@@ -115,37 +117,70 @@ for m = mazes
 
     %% Statistical parametric maps
 
-    % load aggregated (across runs and mazes) behavior 
-    data_path = '/Users/lukasgehrke/Documents/bpn_work/publications/2019-IEEE-VR-Spatial-exploration-behavior-in-large-scale-VR-predicts-subjective-spatial-presence/analyses/';
-    fname = 'behavior';
-    behavior = load([data_path fname '.mat']);
-    behavior = behavior.data;
-    behavior.Participant = str2double(behavior.Participant);
+%     % load aggregated (across runs and mazes) behavior 
+%     data_path = '/Users/lukasgehrke/Documents/bpn_work/publications/2019-IEEE-VR-Spatial-exploration-behavior-in-large-scale-VR-predicts-subjective-spatial-presence/analyses/';
+%     fname = 'behavior';
+%     behavior = load([data_path fname '.mat']);
+%     behavior = behavior.data;
+%     behavior.Participant = str2double(behavior.Participant);
+% 
+%     % build design matrix
+%     predictor_names = {'participant'; 'vgame'}; % 'IPQ_Presence'};
+%     design = table(behavior.Participant, behavior.IPQ_Presence, 'VariableNames', predictor_names);
+% 
+%     % specify model in R terminology'
+%     %model = 'map_point ~ IPQ_Presence';
+%     model = 'map_point ~ vgame';
+% 
+%     % select map measure and run regression of model
+%     % head location
+%     map_measure = squeeze(res.head_loc.all_maps_maze(:,1,:,:));
+%     regression_maps.head_loc = regress_map_mobi3d(map_measure, design, 1, model);
+%     % head velocity
+%     map_measure = squeeze(res.head_loc.all_maps_maze(:,2,:,:));
+%     regression_maps.head_vel = regress_map_mobi3d(map_measure, design, 1, model);
+%     % touch location
+%     map_measure = squeeze(res.touch.all_maps_maze(:,1,:,:));
+%     regression_maps.touch = regress_map_mobi3d(map_measure, design, 1, model);
+%     % hand jerk
+%     map_measure = squeeze(res.hand_jerk.all_maps_maze(:,1,:,:));
+%     regression_maps.hand_jerk = regress_map_mobi3d(map_measure, design, 1, model);
+    
+    for p = {'IPQ_Presence', 'PTSOT', 'vgame'}
+    
+        % load aggregated (across runs and mazes) behavior 
+        data_path = '/Users/lukasgehrke/Documents/bpn_work/publications/2019-IEEE-VR-Spatial-exploration-behavior-in-large-scale-VR-predicts-subjective-spatial-presence/analyses/';
+        fname = 'behavior';
+        behavior = load([data_path fname '.mat']);
+        behavior = behavior.data;
+        behavior.Participant = str2double(behavior.Participant);
 
-    % build design matrix
-    predictor_names = {'participant'; 'IPQ_Presence'};
-    design = table(behavior.Participant, behavior.IPQ_Presence, 'VariableNames', predictor_names);
+        % build design matrix
+        predictor_names = {'participant'; p{1}};
+        design = table(behavior.Participant, behavior.(p{1}), 'VariableNames', predictor_names);
 
-    % specify model in R terminology'
-    model = 'map_point ~ IPQ_Presence';
+        % specify model
+        model = ['map_point ~ ' p{1}]; 
 
-    % select map measure and run regression of model
-    % head location
-    map_measure = squeeze(res.head_loc.all_maps_maze(:,1,:,:));
-    regression_maps.head_loc = regress_map_mobi3d(map_measure, design, 1, model);
-    % head velocity
-    map_measure = squeeze(res.head_loc.all_maps_maze(:,2,:,:));
-    regression_maps.head_vel = regress_map_mobi3d(map_measure, design, 1, model);
-    % touch location
-    map_measure = squeeze(res.touch.all_maps_maze(:,1,:,:));
-    regression_maps.touch = regress_map_mobi3d(map_measure, design, 1, model);
-    % hand jerk
-    map_measure = squeeze(res.hand_jerk.all_maps_maze(:,1,:,:));
-    regression_maps.hand_jerk = regress_map_mobi3d(map_measure, design, 1, model);
+        % select map measure and run regression of model
+        map_measure = squeeze(res.head_loc.all_maps_maze(:,1,:,:)); % head location metric sampled every second        
+        res.regression.(p{1}) = regress_map_mobi3d(map_measure, design, 1, model);
 
+    %     % head location
+    %     map_measure = squeeze(out.means.head_loc.all_maps_maze(:,1,:,:));
+    %     out.regression_maps.head_loc = regress_map_mobi3d(map_measure, design, 1, model);
+    %     % head velocity
+    %     map_measure = squeeze(out.means.head_loc.all_maps_maze(:,2,:,:));
+    %     out.regression_maps.head_vel = regress_map_mobi3d(map_measure, design, 1, model);
+    %     % touch location
+    %     map_measure = squeeze(out.means.touch.all_maps_maze(:,1,:,:));
+    %     out.regression_maps.touch = regress_map_mobi3d(map_measure, design, 1, model);
+    %     % hand jerk
+    %     map_measure = squeeze(out.means.hand_jerk.all_maps_maze(:,1,:,:));
+    %     out.regression_maps.hand_jerk = regress_map_mobi3d(map_measure, design, 1, model);    
+    end
+    
     % save res (grand mean) and regression_maps (effect)
-    out = struct('means', res, 'effects', regression_maps);
-    save([data_path model '_' m], 'out');
+    save([data_path 'regression_' m], 'res');
     clear out res regression_maps;
-
 end
