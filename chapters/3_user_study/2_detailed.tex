@@ -1,0 +1,23 @@
+\subsection{Statistical Analyses}
+With the presented approach we aim to promote benefits of greater spatial resolution of movement behavior to assess a variety of phenomena moderating for example the presence experience in VR. Here, a grand average of, e.g. time spent exploring mazes, provides only limited insights due to its spatial dependence. Some participants may spent more time in the corners but walk faster along straights segments. Without a two-dimensional resolution, this would average out to the same as participants with a constant walking speed. Therefore, we constructed spatial parametric maps. Explained in detail below, we mimicked our approach from established data analyses procedures in cognitive neuroscience and applied it to spatially resolved behavioral data \cite{Friston1994, Bridwell2018a}.
+
+\subsubsection{Parametric Mapping of Ongoing Movement Behavior}
+Enabling our proposed analyses framework, two key challenges must be addressed. First, capturing (rigid body) motion in 3D. With state-of-the art VR hardware sampling motion data at around 90Hz accessing and recording the data is possible\footnote{https://brekel.com/openvr-recorder/}. Further libraries to synchronize data streams across the network exist\footnote{See for example https://github.com/sccn/labstreaminglayer and http://openvibe.inria.fr/, with predominant application across the neurosciences.} providing affordable alternatives to dedicated systems.
+Second, in order to compare motion data pixel-wise across participants, each participant should exhibit data points at each pixel. Therefore, decreasing spatial resolution by sub-sampling and/or smoothing can be employed to address the challenge.
+
+\textbf{Single-subject summary (a.k.a. first-level).} With this analyses, we were interested in expressing where participants spent most of the time exploring the mazes as a function of experienced presence. To speed up subsequent analyses, we first sub-sampled motion capture data of a rigid body calibrated at the VR Headset, see \ref{imt_task}, to 1Hz. Then we computed individual averages for each maze. We averaged across the three repeated explorations per maze, as we were not interested in changes over time but to express exploration behavior as a function of experienced presence more generally. With an average exploration duration of ~3 minutes, for each maze and participant ~180 samples were kept in x and y, discarding the third dimension (up-down) in this analyses, \ref{imt_task} (left) shows one exploration phase of one subject with lines plotted to connect each sample. 
+
+\textbf{Enabling group-level inference (a.k.a. second-level).} Next, a 2D histogram with fixed edges to maintain equal resolution across participants was computed. In order to increase overlap across participants (second challenge, see above) a 2D (square sized) Gaussian blur was applied to the histogram image. A sigma of 1.5 was chosen for the 2D filter kernel as it resulted in a good overlap across participants while maintaining spatial specificity. 
+
+\textbf{Group-level inference.} To investigate the impact of experienced presence on each parameter, we calculated a linear regression at each pixel of the map. We specified the model as $pixels ~ intercept + presence + error$, hence at each pixel we fit a linear regression across participants with presence scores as the predictor variable. Pixels with data of fewer than 12 participants (critically low N) were kept as `NaN' and not subjected to linear regression analyses. Plotting resulting regression estimates yields a 2D parametric map. Uncorrected p-values were used to plot a contour at significant effects with $p < .05$. The Matlab code used to construct the parametric maps is available online\footnote{}.
+% for anonymization: https://github.com/lukasgehrke/mobi-3D-tools
+
+% add GLM toolboxes with resampling
+
+%To address multiple comparison issues with the mass-univariate regression approach, we applied threshold free cluster enhancement to the results F and t maps % cite smith nichols, pernet
+%We thresholded the tfce transform of the true result maps at the 95th percentile (alpha $< .05$) of the max tfce distribution of the bootstraps. 
+%of interest: first, the time spent at each location as well as the number of wall touches elicited in close proximity. In short, this corresponds to where participants spent most of the time exploring the mazes as well as where they were located when touching the walls most frequently. 
+
+%For the map displaying the number of touches, the 2D histogram count of the location of the participants' head was overwritten by the mean number of touches within the 2D histogram bin
+
+%separately for the two parameters duration and number of touches
